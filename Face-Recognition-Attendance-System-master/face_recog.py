@@ -3,18 +3,17 @@ import cv2
 from openpyxl import Workbook
 import datetime
 from firebase import firebase
+from PIL import Image
+import glob
+from pathlib import Path
 
 
 # Get a reference to webcam #0 (the default one)
 video_capture = cv2.VideoCapture(0)
-    
-    
-# Create a woorksheet
-#book=Workbook()
-#sheet=book.active
-    
+
+
 # Load images.
-    
+'''    
 image_1 = face_recognition.load_image_file("dataset/Shreyansh.jpg")
 image_1_face_encoding = face_recognition.face_encodings(image_1)[0]
     
@@ -29,8 +28,17 @@ image_3_face_encoding = face_recognition.face_encodings(image_3)[0]
     
 image_4 = face_recognition.load_image_file("dataset/Mrigyen.jpg")
 image_4_face_encoding = face_recognition.face_encodings(image_4)[0]
-    
-    
+'''
+
+image_list=[]
+def import_photoes():
+    for foldername in glob.glob('dataset/*'):
+        for filename in Path(foldername).glob('*.jpg'):
+            image=Image.open(filename)
+            image_list[foldername].append(image)
+
+import_photoes()
+'''
 # Create arrays of known face encodings and their names
 known_face_encodings = [
         
@@ -50,7 +58,7 @@ known_face_names = [
         "Mrigyen"
        
     ]
-    
+   ''' 
 # Initialize some variables
 face_locations = []
 face_encodings = []
@@ -61,9 +69,9 @@ process_this_frame = True
 now= datetime.datetime.now()
 today=now.day
 month=now.month
-    
+    '''
 firebase = firebase.FirebaseApplication('https://face-attendence.firebaseio.com', None)
-
+'''
 while True:
  # Grab a single frame of video
     ret, frame = video_capture.read()
@@ -122,7 +130,7 @@ while True:
         
     # Save Woorksheet as present month
     # book.save(str(month)+'.xlsx')
-    
+   ''' 
 	
     # Integrate with firebase
     
@@ -141,7 +149,7 @@ while True:
     if(firebase.get('/Bindu','IIT2018105')=='False'):
       if face_names[0] == 'Bindu':
         result = firebase.patch('/Bindu', {'IIT2018105':'True'})
-  
+  '''
  
     # Hit 'q' on the keyboard to quit!
     if cv2.waitKey(1) & 0xFF == ord('q'):
